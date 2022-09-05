@@ -13,4 +13,19 @@ endif()
 file(GLOB_RECURSE app_include Application/include/*.h)
 file(GLOB_RECURSE app_src Application/src/*.cpp)
 add_executable(Application ${app_include} ${app_src})
-target_include_directories(Application PRIVATE ${app_include})
+target_include_directories(Application PRIVATE 
+	${app_include}
+	${PROJECT_SOURCE_DIR}/thirdparty/easy_profiler/include/ # Open-source and easy to add to a project profiling library.)
+	)
+target_link_libraries(Application PRIVATE # PRIVATE is used as <keyword> here since Application is an executable, nothing will depend on it.
+	general ${PROJECT_SOURCE_DIR}/thirdparty/easy_profiler/lib/easy_profiler.lib # Linking against the .lib of the easy_profiler dynamic library. This means that the pre-compiled "easy_profiler.dll" will need to be placed besides the Application.exe .
+	)
+
+set_target_properties(Application PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/build/Application/bin")
+
+file(MAKE_DIRECTORY ${PROJECT_SOURCE_DIR}/profilerOutputs) # Folder for holding easy_profiler's profiling data. file(MAKE_DIRECTORY <dir>) creates a new specified directiory if it doesn't exist yet.
+
+set(USE_EASY_PROFILER OFF CACHE BOOL "Whether to enable profiling with easy_profiler. Generated .prof files will be located under /profilerOutputs/") # set(<define> <default value> CACHE <variable type> <description>) creates a variable interactible in the CMake GUI.
+if (USE_EASY_PROFILER) # If the use of easy_profiler is desired, add a global preprocessor definition.
+	add_compile_definitions(BUILD_WITH_EASY_PROFILER) # BUILD_WITH_EASY_PROFILER is the define that the library's user must declare when they wish to use easy_profiler.
+endif()
