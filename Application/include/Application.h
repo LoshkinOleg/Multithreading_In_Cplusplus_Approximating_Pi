@@ -1,5 +1,0 @@
-class Application
-{
-public:
-	Application(){};
-}
