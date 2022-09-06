@@ -6,6 +6,8 @@
 
 #include <easy/profiler.h>
 
+// TODO: before posting, look into why approximations differ despite the same seed being used!
+
 inline float Magnitude(const float x, const float y)
 {
 	return std::sqrtf(x * x + y * y);
