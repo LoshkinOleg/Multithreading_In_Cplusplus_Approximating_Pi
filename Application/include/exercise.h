@@ -26,62 +26,21 @@ float SingleThread(const size_t iterations)
 	return 0.0f; // Compute approximation of PI using the ratio of points inside the unit circle vs. points inside the unit square.
 }
 
-// Approximates PI by kicking off smaller pi approximating subroutines and passes the random number generator by reference to them.
-float SimpleAsync(const size_t iterations, const size_t nrOfWorkers)
-{
-	EASY_BLOCK("SimpleAsync approach.", profiler::colors::Red);
-
-	std::default_random_engine e;
-	std::uniform_real_distribution<float> d(-1.0f, 1.0f);
-
-	// Subroutine lambda we'll be trying to launch on a separate threads. Note that the random engine and distribution is captured by reference.
-	const auto approximatePi = [&e, &d](const size_t iterations, const size_t nrOfWorkers)->size_t
-	{
-		EASY_BLOCK("Approximation subroutine.", profiler::colors::Red100);
-		
-		/*TODO:
-			Generate 2D points within a unit square using e, d, iterationsand nrOfWorkersand count the number of points that lies inside the unit circle.
-			The idea is that each subroutine should only do the iterations / nrOfWorkers amount of iterations and you'll then sum up the results of all the
-			subroutines to obtain the equivalent approximation of the SingleThread approach.
-		*/
-
-		return 0;
-	};
-
-	std::vector<std::future<size_t>> futures; // std::futures we'll be using to retireving the results of approximatePi's once they've done running.
-	{
-		EASY_BLOCK("Kicking off threads.", profiler::colors::Red);
-		
-		/*TODO:
-			Kick off std::async's executing approximatePi.
-		*/
-	}
-
-	size_t insideCircle = 0;
-	{
-		// Retireve the results from the (hopefully) other threads once it's done computing things.
-		EASY_BLOCK("Retrieving results.", profiler::colors::Red);
-		
-		/*TODO:
-			Retrieve the results of the subroutines computed asynchnously.
-		*/
-	}
-
-	return 0.0f;
-}
-
 // Approximates PI by kicking off smaller pi approximating subroutines but lets them instanciate their own random number generators.
-float AsyncNoRef(const size_t iterations, const size_t nrOfWorkers)
+float Async(const size_t iterations, const size_t nrOfWorkers)
 {
-	EASY_BLOCK("AsyncNoRef method.", profiler::colors::Blue);
+	EASY_BLOCK("Async method.", profiler::colors::Blue);
 
-	// New implementation of approximatePi that constructs it's own random engine rather than capturing one by reference.
-	const auto approximatePi = [](const size_t iterations, const size_t nrOfWorkers)->size_t
+	// Implementation of the PI approximating algorithm but this time split into multiple subroutines with their own random number generators.
+	const auto approximatePi = [](const size_t iterations, const size_t nrOfWorkers, const size_t workerId)->size_t
 	{
 		EASY_BLOCK("Approximation subroutine.", profiler::colors::Blue100);
 
 		/*TODO:
-			Implement an approximatePi as the last time but using a local random number generator instead.
+			Generate 2D points within a unit square using e, d, iterationsand nrOfWorkersand count the number of points that lies inside the unit circle.
+			The idea is that each subroutine should only do the iterations / nrOfWorkers amount of iterations and you'll then sum up the results of all the
+			subroutines to obtain the equivalent approximation of the SingleThread approach.
+			Use local random number generators.
 		*/
 
 		return 0;
@@ -117,8 +76,6 @@ float Threads(const size_t iterations, const size_t nrOfWorkers)
 	const auto approximatePi = [](/* TODO: Modify the signature of this lambda so that it uses a std::promise to return a value instead of the regular return value. */)
 	{
 		EASY_BLOCK("Approximation subroutine.", profiler::colors::Yellow100);
-		std::default_random_engine e;
-		std::uniform_real_distribution<float> d(-1.0f, 1.0f);
 		
 		/*TODO:
 			Implement an approximatePi like the one from AsyncNoRef but this time use a std::promise to return the result.
