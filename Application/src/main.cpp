@@ -19,7 +19,7 @@ int main()
 	How many iterations we'll go through before returning an approximation of PI.
 	Adjust this to suit your PC's performance, there's no need for it to take 5 hours to approximate PI.
 	*/
-	constexpr const size_t ITERATIONS = 10000000;
+	constexpr const size_t ITERATIONS = 1000000;
 	
 	/*
 	Number of worker threads that can run an approximation subroutine at the same time.
@@ -35,19 +35,12 @@ int main()
 	std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Wait for 100ms for ease of profiler graph reading.
 	std::cout << "SingleThread has computed PI as " << std::to_string(piApprox) << " in " << std::to_string((endTime - startTime).count()) << " ticks." << std::endl;
 
-	// Measure SimpleAsync.
+	// Measure Async.
 	startTime = std::chrono::system_clock::now();
-	float pi = SimpleAsync(ITERATIONS, NR_OF_WORKERS);
+	float pi = Async(ITERATIONS, NR_OF_WORKERS);
 	endTime = std::chrono::system_clock::now();
 	std::this_thread::sleep_for(std::chrono::milliseconds(100));
-	std::cout << "SimpleAsync has computed PI as " << std::to_string(pi) << " in " << std::to_string((endTime - startTime).count()) << " ticks." << std::endl;
-
-	// Measure AsyncNoRef.
-	startTime = std::chrono::system_clock::now();
-	pi = AsyncNoRef(ITERATIONS, NR_OF_WORKERS);
-	endTime = std::chrono::system_clock::now();
-	std::this_thread::sleep_for(std::chrono::milliseconds(100));
-	std::cout << "AsyncNoRef has computed PI as " << std::to_string(pi) << " in " << std::to_string((endTime - startTime).count()) << " ticks." << std::endl;
+	std::cout << "Async has computed PI as " << std::to_string(pi) << " in " << std::to_string((endTime - startTime).count()) << " ticks." << std::endl;
 
 	// Measure Threads.
 	startTime = std::chrono::system_clock::now();
