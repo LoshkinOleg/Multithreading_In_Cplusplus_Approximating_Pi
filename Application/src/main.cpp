@@ -5,7 +5,7 @@
 
 #include <easy/profiler.h>
 
-#if USE_WORKING_IMPLEMENTATION
+#if !USE_WORKING_IMPLEMENTATION
 #include "workingImplementation.h"
 #else
 #include "exercise.h"
